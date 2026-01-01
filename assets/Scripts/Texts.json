@@ -1,0 +1,17 @@
+{
+    "Intro": {
+        "Title": "AIGVerse: Save the Patient",
+        "Text1": "Ah... you've arrived. \nWelcome, brave one.",
+        "Text2": "I am the Aroha, the wizard of the AIGVerse and here to guide you.",
+        "Text3": "Use knowledge, wisdom and empathy as your guiding force through this journey.",
+        "Text4": "Come Rakshak, let's begin!",
+        "ButtonText": "Get Started"
+    },
+    "InputName":
+    {
+        "Title": "Welcome Rakshak!",
+        "Tagline": "Your mission of care begins now.",
+        "Enter": "Enter your Name",
+        "ButtonText": "Let's Begin"
+    }
+}
