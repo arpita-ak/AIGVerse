@@ -97,7 +97,7 @@ export class IntroAnimations extends Component {
             .call(()=>{
                 // ready for texts
                 tween(this.text1.getComponent(UIOpacity)).to(0.5, {opacity: 255}).start();
-                this.utils.ShowText(this.text1.children[0], "Ah... you've arrived. \nWelcome, brave one.")
+                this.utils.showText(this.text1.getChildByName("Label"), "Ah... you've arrived. \nWelcome, brave one.")
             })
             .delay(2)
             .call(()=>{

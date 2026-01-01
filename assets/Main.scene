@@ -1004,7 +1004,7 @@
       "__id__": 6
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 28
@@ -1414,7 +1414,7 @@
     "__prefab": null,
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 560.9619140625,
+      "width": 584.5458984375,
       "height": 126
     },
     "_anchorPoint": {
@@ -1444,7 +1444,7 @@
       "b": 255,
       "a": 255
     },
-    "_string": "AIG Verse: Save the Patient",
+    "_string": "AIG Verse: Values Navigator",
     "_horizontalAlign": 1,
     "_verticalAlign": 1,
     "_actualFontSize": 50,
@@ -1750,7 +1750,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "_opacity": 255,
+    "_opacity": 0,
     "_id": "3cbZkqtxFJQpjeNQgcYoiD"
   },
   {
