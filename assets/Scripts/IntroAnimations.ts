@@ -1,4 +1,4 @@
-import { _decorator, Animation, Component, Node, tween, UIOpacity, Vec3 } from 'cc';
+import { _decorator, Animation, Component, Label, Node, tween, UIOpacity, Vec3, resources, UITransform, EditBox } from 'cc';
 import { utils } from './utils';
 const { ccclass, property } = _decorator;
 
@@ -15,11 +15,18 @@ export class IntroAnimations extends Component {
     logo: Node = null;
 
     @property(Node)
-    topRightDoc: Node = null;
+    topRightHUD: Node = null;
+
+    @property(Node)
+    NextButton: Node = null;
+
+    @property(Node)
+    CTAButton: Node = null;
 
     @property(Node)
     HospitalBuildingNode: Node = null;
 
+    // Building door and characters
     @property(Node)
     Entrance:Node = null;
 
@@ -30,91 +37,224 @@ export class IntroAnimations extends Component {
     WizardCharacter: Node = null;
 
     @property(Node)
-    text1: Node = null; 
+    mainTitle: Node = null;
 
     @property(Node)
-    text2: Node = null; 
-
-    @property(Node)
-    text3: Node = null; 
-
-    @property(Node)
-    text4: Node = null; 
+    textbubble: Node = null; 
 
     @property(utils)
     utils: utils = null;
 
+    // Register and Login Window
+    @property(Node)
+    LoginWindow: Node = null;
+
+    @property(Node)
+    RegisterWindow: Node = null;
+
+    @property(Node)
+    WizardCharacter_2: Node = null;
+
+    @property(Node)
+    Textbubble_2: Node = null;
+
+    @property(EditBox)
+    nameEditBox: EditBox = null;
+
+    private Texts: any = null;
+    private currentTextIndex: number = 0;
+
     start() {
-        this.playIntroAnimation();
+        this.loadTextsAndPlayAnimation();
+    }
+
+    private loadTextsAndPlayAnimation() {
+        resources.load('Texts', (err, textData) => {
+            if (err) {
+                console.error('Failed to load Texts.json:', err);
+                return;
+            }
+            this.Texts = textData;
+            this.Texts = this.Texts.json; // Access the JSON content
+            console.log('Loaded Texts:', this.Texts.Intro.Title);
+            this.playIntroAnimation();
+        });
     }
 
     update(deltaTime: number) {
         
     }
 
-    playIntroAnimation(){
-        // play fill animation
-        this.SplashScreenNode.getComponent(Animation).play("splashScreen");
-        // after the above animtaion
-        this.scheduleOnce(()=>{
-            tween(this.outline.getComponent(UIOpacity))
-                .to(1, {opacity: 0}).start();
-            // move the logo towards top right
-            tween(this.logo)
-                .to(1, {position: this.topRightDoc.getPosition(), scale: new Vec3(0.3, 0.3, 0.3)})
-                .start();
-            tween(this.logo.getComponent(UIOpacity))
-                .to(1, {opacity: 0}).start();
-        }, 2.5);
-        this.scheduleOnce(()=>{
-            tween(this.topRightDoc.getComponent(UIOpacity)).to(1, {opacity: 255}).start();
-        }, 3.5);
+    // Utility function to create a delay
+    private sleep(seconds: number) {
+        return new Promise<void>((resolve) => this.scheduleOnce(() => resolve(), seconds));
+    }
+
+    // Tween opacity of a Node or UIOpacity component
+    private tweenOpacity(target: Node | UIOpacity, duration: number, toOpacity: number) {
+        const comp = (target as Node).getComponent ? (target as Node).getComponent(UIOpacity) : (target as UIOpacity);
+        return tween(comp).to(duration, { opacity: toOpacity }).start();
+    }
+
+    // Tween position/scale of a Node
+    private tweenNode(node: Node, duration: number, props: any) {
+        return tween(node).to(duration, props).start();
+    }
+
+    // Show a sequence of text messages with typewriter effect
+    private async showTextBubble(textBubble: Node, message: string = "") {
+
+            // calculate label width based on message length
+            const label = textBubble.getChildByName('Label');
+            label.getComponent(Label).string = message;
+
+            // This is the critical step! 
+            // It forces the Label to recalculate its internal mesh immediately.
+            await label.getComponent(Label).updateRenderData(true);
+            
+            const labelWidth = label.getComponent(UITransform).contentSize.width;
+            const labelHeight = label.getComponent(UITransform).contentSize.height;
+            console.log("Label size: ", labelWidth, labelHeight);
+
+            // adjust text bubble size based on label size
+            const paddingX = 75; 
+            const paddingY = 65;
+            textBubble.getComponent(UITransform).setContentSize(labelWidth + paddingX, labelHeight + paddingY);
+
+            // fade in text bubble and show text
+            this.tweenOpacity(textBubble, 0.5, 255);
+            label.getComponent(Label).string = ""; // Clear existing text
+            label.getComponent(UIOpacity).opacity = 255;
+            if (message && this.utils) {
+                this.utils.showText(label, message);
+            }
+            await this.sleep(0.05*(message.length - 1) + 1); // wait for text to finish + extra time
+    }
+
+    // Reset text bubble
+    private async resetTextBubble() {
+        const label = this.textbubble.getChildByName('Label');
+        label.getComponent(Label).string = "";
+        this.tweenOpacity(this.textbubble, 0.3, 0);
+        await this.sleep(0.3);
+    }
+
+    async playIntroAnimation(){
+        // play splashscreen radial fill animation
+        this.SplashScreenNode.getComponent(Animation).play('splashScreen');
+
+        // wait then fade outline and move logo to top right
+        await this.sleep(2.5);
+        this.tweenOpacity(this.outline.getComponent(UIOpacity), 1, 0);
+        this.tweenNode(this.logo, 1, { position: this.topRightHUD.getPosition(), scale: new Vec3(0.3, 0.3, 0.3) });
+        this.tweenOpacity(this.logo.getComponent(UIOpacity), 1, 0);
+
+        // top right doc visible with logo
+        await this.sleep(1);
+        this.tweenOpacity(this.topRightHUD.getComponent(UIOpacity), 1, 255);
+
         // building visible
-        this.scheduleOnce(()=>{ 
-            tween(this.SplashScreenNode.getComponent(UIOpacity)).to(1, {opacity: 0}).start();
-            // set up the scene as required
-            this.HospitalBuildingNode.active = true;
-            this.HospitalBuildingNode.getComponent(UIOpacity).opacity = 0;
-            tween(this.HospitalBuildingNode.getComponent(UIOpacity)).to(1, {opacity: 255})
-            .call(()=>{
-                tween(this.HospitalBuildingNode).to(1, {scale: new Vec3(2.5, 2.5, 2.5)}).  start();
-            }).start();
-        }, 4);
-        // entrance visible
-        this.scheduleOnce(()=>{
-            this.Entrance.active = true;
-            tween(this.Entrance).to(1, {scale: new Vec3(1.8,1.8,1.8)})
-            .call(()=>{
-                this.Entrance_blurred.active = true;
-                tween(this.Entrance_blurred.getComponent(UIOpacity)).to(1, {opacity: 255}).start();
-            }).start();
-        }, 6.5);
-        // wizard character visible
-        this.scheduleOnce(()=>{
-            this.WizardCharacter.active = true;
-            tween(this.WizardCharacter.getComponent(UIOpacity)).to(1, {opacity: 255})
-            .delay(1)
-            .call(()=>{
-                // ready for texts
-                tween(this.text1.getComponent(UIOpacity)).to(0.5, {opacity: 255}).start();
-                this.utils.showText(this.text1.getChildByName("Label"), "Ah... you've arrived. \nWelcome, brave one.")
-            })
-            .delay(2)
-            .call(()=>{
-                tween(this.text1.getComponent(UIOpacity)).to(0.5, {opacity: 0}).start();
-                tween(this.text2.getComponent(UIOpacity)).to(0.5, {opacity: 255}).start();
-            })
-            .delay(2)
-            .call(()=>{
-                tween(this.text2.getComponent(UIOpacity)).to(0.5, {opacity: 0}).start();
-                tween(this.text3.getComponent(UIOpacity)).to(0.5, {opacity: 255}).start();
-            })
-            .delay(2)
-            .call(()=>{
-                tween(this.text3.getComponent(UIOpacity)).to(0.5, {opacity: 0}).start();
-                tween(this.text4.getComponent(UIOpacity)).to(0.5, {opacity: 255}).start();
-            }).start();
-        }, 9.5);
+        await this.sleep(0.5);
+        this.tweenOpacity(this.SplashScreenNode.getComponent(UIOpacity), 1, 0);
+        this.HospitalBuildingNode.active = true;
+        const hbOpacity = this.HospitalBuildingNode.getComponent(UIOpacity);
+        if (hbOpacity) hbOpacity.opacity = 0;
+        // building scale up to show the entrance
+        tween(hbOpacity).to(1, { opacity: 255 }).call(() => {
+            this.tweenNode(this.HospitalBuildingNode, 1, { scale: new Vec3(2.5, 2.5, 2.5) });
+        }).start();
+
+        // entrance door visible
+        await this.sleep(2.5);
+        this.Entrance.active = true;
+        this.tweenNode(this.Entrance, 1, { scale: new Vec3(1.8, 1.8, 1.8) });
+        // show title here (from JSON)
+        this.mainTitle.active = true;
+        this.mainTitle.getComponent(Label).string = this.Texts.Intro.Title;
+        this.tweenOpacity(this.mainTitle.getComponent(UIOpacity), 1, 255);
+
+        // entrance blurred effect
+        await this.sleep(1);
+        this.Entrance_blurred.active = true;
+        this.tweenOpacity(this.Entrance_blurred.getComponent(UIOpacity), 1, 255);
+
+        // wizard character visible and text sequence
+        await this.sleep(1);
+        this.WizardCharacter.active = true;
+        this.tweenOpacity(this.WizardCharacter.getComponent(UIOpacity), 1, 255);
+        await this.sleep(1);
+
+        // Show first text and next button
+        this.currentTextIndex = 1;
+        await this.showTextBubble(this.textbubble, this.Texts.Intro.Text1);
+        this.NextButton.active = true;
+        this.tweenOpacity(this.NextButton.getComponent(UIOpacity), 0.5, 255);
+    }
+
+    onNextButtonClicked() {
+        console.log("Next button clicked");
+        // hide the next button temporarily
+        this.tweenOpacity(this.NextButton.getComponent(UIOpacity), 0.3, 0);
+        this.NextButton.active = false;
+        
+        if (this.currentTextIndex === 1) {
+            // Show Text2
+            this.resetTextBubble();
+            this.showTextBubble(this.textbubble, this.Texts.Intro.Text2).then(() => {
+                // Keep next button visible
+                this.NextButton.active = true;
+                this.tweenOpacity(this.NextButton.getComponent(UIOpacity), 0.5, 255);
+            });
+            this.currentTextIndex = 2;
+        } else if (this.currentTextIndex === 2) {
+            // Show Text3
+            this.resetTextBubble();
+            this.showTextBubble(this.textbubble, this.Texts.Intro.Text3).then(() => {
+                // Keep next button visible
+                this.NextButton.active = true;
+                this.tweenOpacity(this.NextButton.getComponent(UIOpacity), 0.5, 255);
+            });
+            this.currentTextIndex = 3;
+        } else if (this.currentTextIndex === 3) {
+            // Show Text4
+            this.resetTextBubble();
+            this.showTextBubble(this.textbubble, this.Texts.Intro.Text4).then(() => {
+                // show CTA button
+                this.CTAButton.active = true;
+                this.tweenOpacity(this.CTAButton.getComponent(UIOpacity), 0.5, 255);
+            });
+            this.currentTextIndex = 4;
+        }
+    }
+
+    async onCTAButtonClicked() {
+        console.log("CTA button clicked");
+        // Hide CTA button
+        this.tweenOpacity(this.CTAButton.getComponent(UIOpacity), 0.3, 0);
+        this.CTAButton.active = false;
+
+        // Transition to Login screen
+        this.WizardCharacter.active = false;
+        this.textbubble.active = false;
+
+        // Proceed to Login screen
+        this.LoginWindow.active = true;
+        this.tweenOpacity(this.LoginWindow.getComponent(UIOpacity), 1, 255);
+        this.tweenNode(this.LoginWindow, 2, { scale: new Vec3(0.55, 0.55, 0) });
+
+        // show the register window after a delay
+        await this.sleep(1);
+        this.RegisterWindow.active = true;
+        this.tweenOpacity(this.RegisterWindow.getComponent(UIOpacity), 0.2, 255);
+        
+        // show the second wizard character and text bubble
+        await this.sleep(0.5);
+        this.WizardCharacter_2.active = true;
+        this.tweenOpacity(this.WizardCharacter_2.getComponent(UIOpacity), 0.5, 255);
+
+        // fade in text bubble and show text
+        const message = "Ah, the Rakshak returns...\nThe mission awaits.\nEnter your scrool name\nand secret spell.";
+        this.showTextBubble(this.Textbubble_2, message);
     }
 }
 
