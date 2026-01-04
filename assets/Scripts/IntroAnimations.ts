@@ -61,6 +61,9 @@ export class IntroAnimations extends Component {
     @property(EditBox)
     nameEditBox: EditBox = null;
 
+    @property(Node)
+    ChooseAvatarNode: Node = null;
+
     private Texts: any = null;
     private currentTextIndex: number = 0;
 
@@ -253,9 +256,24 @@ export class IntroAnimations extends Component {
         this.tweenOpacity(this.WizardCharacter_2.getComponent(UIOpacity), 0.5, 255);
 
         // fade in text bubble and show text
-        const message = "Ah, the Rakshak returns...\nThe mission awaits.\nEnter your scrool name\nand secret spell.";
+        const message = "Ah, the Rakshak returns...\nThe mission awaits.\nEnter your scroll name\nand secret spell.";
         this.showTextBubble(this.Textbubble_2, message);
     }
+
+    onLetusGoButtonClicked() {
+        console.log("Let us go button clicked");
+        const playerName = this.nameEditBox.string.trim();
+
+        if (playerName.length === 0) {
+            alert("Please enter your name to proceed.");
+            return;
+        }   
+
+        // Store player name (could be saved to a global state or player prefs)
+        console.log("Player Name: ", playerName);
+
+        this.ChooseAvatarNode.active = true;
+        this.tweenOpacity(this.ChooseAvatarNode.getComponent(UIOpacity), 1, 255);
+    }  
+
 }
-
-

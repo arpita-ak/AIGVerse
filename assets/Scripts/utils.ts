@@ -4,10 +4,11 @@ const { ccclass, property } = _decorator;
 @ccclass('utils')
 export class utils extends Component {
     start() {
-
+        this.node.on("ShowText", this.showText, this);
     }
 
     showText(node: Node, text: string) {
+        console.log("showing labe: ", text);
         const label = node.getComponent(Label);
         if (!label) return;
 
@@ -18,6 +19,7 @@ export class utils extends Component {
         this.schedule(() => {
             i++;
             label.string = text.slice(0, i);
+            
         }, 0.05, text.length - 1, 0); 
     }
 
