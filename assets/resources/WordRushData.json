@@ -1,0 +1,74 @@
+{
+    "Questions": [
+        {
+            "id": 1,
+            "text": "1. Doing the right thing,\n even when unseen.",
+            "optionA": "Interest",
+            "optionB": "Integrity",
+            "correct": "B"
+        },
+        {
+            "id": 2,
+            "text": "2. Protective clothing for\nstaff and patients.",
+            "optionA": "Scrubs",
+            "optionB": "Gloves",
+            "correct": "A"
+        },
+        {
+            "id": 3,
+            "text": "3. Warm, caring attitude\nin service.",
+            "optionA": "Grace",
+            "optionB": "Grudge",
+            "correct": "A"
+        }, 
+        {
+            "id": 4,
+            "text": "4. Space where patients sit before appointments.",
+            "optionA": "Lab",
+            "optionB": "Lobby",
+            "correct": "B"
+        },
+        {
+            "id": 5,
+            "text": "5. Essential value in every\npatient interaction.",
+            "optionA": "Respect",
+            "optionB": "Routine",
+            "correct": "A"
+        },
+        {
+            "id": 6,
+            "text": "6. Cost estimate before \ntreatment begins.",
+            "optionA": "Expense",
+            "optionB": "Estimate",
+            "correct": "B"
+        },
+        {
+            "id": 7,
+            "text": "7. Polite behaviour that\n comforts patients.",
+            "optionA": "Mood",
+            "optionB": "Manners",
+            "correct": "B"
+        },
+        {
+            "id": 8,
+            "text": "8. Being present and\nattentive with patients.",
+            "optionA": "Engage",
+            "optionB": "Escape",
+            "correct": "A"
+        },
+        {
+            "id": 9,
+            "text": "9. Recording accurate\ndetails in the system.",
+            "optionA": "Error",
+            "optionB": "Entry",
+            "correct": "B"
+        },
+        {
+            "id": 10,
+            "text": "10. Department for urgent,\nlife-saving care.",
+            "optionA": "Trauma",
+            "optionB": "Therapy",
+            "correct": "A"
+        }
+    ]
+}
