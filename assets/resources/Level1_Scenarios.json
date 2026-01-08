@@ -8,31 +8,31 @@
             "situation": "Front desk alert: A patient walks in. How do you respond?",
             "option1": {
                 "text": "Smile politely, greet and ask ‘Hi, is this your first visit? If not, please give me your file.",
-                "feedback": "Good start! Smile and greet, but don’t rush the file. Add warmth.",
+                "feedback": "Good start! Smile and greet, but \ndon’t rush the file. Add warmth.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option2": {
                 "text": "“May I see your file?” Skip the smile, they’re in pain, it’s a hospital.",
-                "feedback": "Oops! Fast is fine, but empathy matters. A smile heals.",
+                "feedback": "Oops! Fast is fine, but empathy \nmatters. A smile heals.",
                 "try_again": "Try Again!", 
                 "isCorrect": false
             },
             "option3": {
                 "text": "Smile, greet, and say, “Good morning, I’m Lee. How can I help you today?”",
-                "feedback": "Well done! Smiling, greeting, and introducing yourself sets a positive tone and commitment to care.",
+                "feedback": "Well done! Smiling, greeting, and \nintroducing yourself sets a positive \ntone and commitment to care.",
                 "try_again": "Great Job!",
                 "isCorrect": true
             },
             "option4": {
                 "text": "Smile, greet, and say, “Good morning, I’m Lee. Welcome to AIG Hospitals, happy to serve you. How can I help?”",
-                "feedback": "Uh-huh! Smile and greet, but keep it professional. Patient needs comfort.",
+                "feedback": "Uh-huh! Smile and greet, but keep it \nprofessional. Patient needs comfort.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option5": {
                 "text": "Don’t interfere, they’ll call if they need help.",
-                "feedback": "Alas! Don’t wait, act! Anticipate, help, and show kindness.",
+                "feedback": "Alas! Don’t wait, act! Anticipate, help, and\n show kindness.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             }
