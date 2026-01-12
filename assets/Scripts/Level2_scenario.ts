@@ -25,8 +25,8 @@ interface IScenario {
     option5: IOption;
 }
 
-@ccclass('Level1_scenario')
-export class Level1_scenario extends Component {
+@ccclass('Level2_scenario')
+export class Level2_scenario extends Component {
 
     @property(Node)
     IntroNode: Node = null;
@@ -72,7 +72,7 @@ export class Level1_scenario extends Component {
     retryButton: Node = null;
 
     @property(Node)
-    Level2_Scenario: Node = null;
+    Level3_Scenario: Node = null;
 
     private BlueColor: Color = new Color('#014788');
     private RedColor: Color = new Color('#F44336');
@@ -80,7 +80,7 @@ export class Level1_scenario extends Component {
 
     // Our Dictionary to store scenario data
     private scenarioDictionary: Map<number, IScenario> = new Map();
-    private currentScenarioId: number = 1;
+    private currentScenarioId: number = 2;
 
     start() {
         this.loadScenarios();
@@ -266,7 +266,9 @@ export class Level1_scenario extends Component {
     onNextScenarioButtonClick()
     {
         // Move to next scenario
-        this.currentScenarioId++;
-        this.Level2_Scenario.active = true;
+
+        //not necessary as we will fetch it again
+        // this.currentScenarioId++;
+        this.Level3_Scenario.active = true;
     }
 }

@@ -33,6 +33,9 @@ export class wordRush extends Component {
     @property(Node)
     finalAlphabets: Node = null;
 
+    @property(Node)
+    StartScenario1:Node = null;
+
     private questions: QuestionData[] = [];
     private currentQuestion: QuestionData = null;
     private currentQuestionIndex: number = 0;
@@ -58,6 +61,11 @@ export class wordRush extends Component {
             this.currentQuestionIndex = _number;
             this.currentQuestion = this.questions[this.currentQuestionIndex];
             this.showQuestion(this.currentQuestion.text, this.currentQuestion.optionA, this.currentQuestion.optionB);
+        }
+        else
+        {
+            this.StartScenario1.active = true;
+            this.node.active = false;
         }
     }
 
@@ -170,9 +178,9 @@ export class wordRush extends Component {
         }, 1);
     }
 
+
+
     update(deltaTime: number) {
         
     }
 }
-
-

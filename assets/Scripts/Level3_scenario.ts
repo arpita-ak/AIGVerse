@@ -25,8 +25,8 @@ interface IScenario {
     option5: IOption;
 }
 
-@ccclass('Level1_scenario')
-export class Level1_scenario extends Component {
+@ccclass('Level3_scenario')
+export class Level3_scenario extends Component {
 
     @property(Node)
     IntroNode: Node = null;
@@ -72,7 +72,7 @@ export class Level1_scenario extends Component {
     retryButton: Node = null;
 
     @property(Node)
-    Level2_Scenario: Node = null;
+    Level3_Scenario: Node = null;
 
     private BlueColor: Color = new Color('#014788');
     private RedColor: Color = new Color('#F44336');
@@ -80,7 +80,7 @@ export class Level1_scenario extends Component {
 
     // Our Dictionary to store scenario data
     private scenarioDictionary: Map<number, IScenario> = new Map();
-    private currentScenarioId: number = 1;
+    private currentScenarioId: number = 3;
 
     start() {
         this.loadScenarios();
@@ -173,6 +173,14 @@ export class Level1_scenario extends Component {
 
         this.people.active = true;
         this.tweenOpacity(this.people.getComponent(UIOpacity), 1.5, 255);
+
+        this.scheduleOnce(()=>{
+            // show blurred background
+            this.BlurredBG.active = true;
+            this.tweenOpacity(this.BlurredBG.getComponent(UIOpacity), 1, 255); 
+            this.textBubble2.active = true;
+            this.showTextBubble(this.textBubble2, "My daughter is in pain for 8 months.\n Medicines failed. Need urgent\n appointment, only 2 days in hand\n before I neeed to travel back to be \nwith wife and younger son!")
+        }, 2);
     }
 
     onExploreTheOptionsButtonClick() {
@@ -183,10 +191,8 @@ export class Level1_scenario extends Component {
         // hide people
         this.people.active = false;
         this.tweenOpacity(this.people.getComponent(UIOpacity), 0.5, 0);
-
-        // show blurred background
-        this.BlurredBG.active = true;
-        this.tweenOpacity(this.BlurredBG.getComponent(UIOpacity), 1, 200); 
+        // hide text bubble2
+        this.tweenOpacity(this.textBubble2, 0.5, 0);
 
         // show the options
         this.tweenOpacity(this.OptionButtonsNode.getComponent(UIOpacity), 0.5, 255);
@@ -266,7 +272,9 @@ export class Level1_scenario extends Component {
     onNextScenarioButtonClick()
     {
         // Move to next scenario
-        this.currentScenarioId++;
-        this.Level2_Scenario.active = true;
+
+        //not necessary as we will fetch it again
+        // this.currentScenarioId++;
+        //this.Level3_Scenario.active = true;
     }
 }

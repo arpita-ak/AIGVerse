@@ -20,19 +20,19 @@
             },
             "option3": {
                 "text": "Smile, greet, and say, “Good morning, I’m Lee. How can I help you today?”",
-                "feedback": "Well done! Smiling, greeting, and \nintroducing yourself sets a positive \ntone and commitment to care.",
+                "feedback": "Well done! Smiling, greeting, \nand introducing yourself sets a positive \ntone and commitment to care.",
                 "try_again": "Great Job!",
                 "isCorrect": true
             },
             "option4": {
                 "text": "Smile, greet, and say, “Good morning, I’m Lee. Welcome to AIG Hospitals, happy to serve you. How can I help?”",
-                "feedback": "Uh-huh! Smile and greet, but keep it \nprofessional. Patient needs comfort.",
+                "feedback": "Uh-huh! Smile and \ngreet, but keep it professional. \nPatient needs comfort.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option5": {
                 "text": "Don’t interfere, they’ll call if they need help.",
-                "feedback": "Alas! Don’t wait, act! Anticipate, help, and\n show kindness.",
+                "feedback": "Alas! Don’t wait, a\nct! Anticipate, help, and\n show kindness.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             }
@@ -45,31 +45,31 @@
             "situation": "A distressed family with a patient in wheelchair approaches the ER",
             "option1": {
                 "text": "Smile and Greet: “I'm Su. How can I help today?”",
-                "feedback": "Polite, yes, but patients need urgency and warmth.",
+                "feedback": "Polite, yes, but \npatients need urgency and \nwarmth.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option2": {
                 "text": "Skip the smile, alert the doctor now.",
-                "feedback": "Hold up! Understand first, then act.",
+                "feedback": "Hold up! Understand \nfirst, then act.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option3": {
-                "text": "Apprach fast: “I'm Su. here to assist. What's the issue.”",
-                "feedback": "Bravo! Fast, clear, and caring, just right for the ER.",
+                "text": "Approach fast: “I'm Su. here to assist. What's the issue.”",
+                "feedback": "Bravo! Fast, clear, and \ncaring, just right \nfor the ER.",
                 "try_again": "Well Done!",
                 "isCorrect": true
             },
             "option4": {
                 "text": "Yell out, “How did this happen? Who's responsible?”",
-                "feedback": "Not right! Shouting creates fear. Stay composed and helpfull.",
+                "feedback": "Not right! Shouting creates \nfear. Stay composed and \nhelpfull.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option5": {
                 "text": "Smile Politely and ask gently, “What is your concern”",
-                "feedback": "Too much! Patients want calm assurance, not overacting.",
+                "feedback": "Too much! Patients \nwant calm assurance, \nnot overacting.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             }
@@ -84,31 +84,31 @@
             "situation": "Daughter in pain for 8 months, meds useless. needs urgent appointment, 2-day deadline.",
             "option1": {
                 "text": "Smile and say, “Help Desk will take care of you.”",
-                "feedback": "Too passive! Show the path clearly, don't leave them guessing.",
+                "feedback": "Too passive! Show the path clearly, \ndon't leave them guessing.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option2": {
                 "text": "Lead him to the Help Desk, see if your other colleagues has time for tea.",
-                "feedback": "Tea break can wait! Focus on the patient.",
+                "feedback": "Tea break can wait! \nFocus on the patient.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option3": {
                 "text": "Cut to the chase: “Please give the patient's name and phone number to start registration.” No need to smile, he is in a hurry.",
-                "feedback": "Quick work, yes, but kindness counts.",
+                "feedback": "Quick work, yes, but k\nindness counts.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             },
             "option4": {
                 "text": "Smile and say: “Good afternoon, I'm Mel. Let's complete registration, then apointment. Head of Help Desk on the ground floor. Don't worry, your daughter will be taken care of.”",
-                "feedback": "Excellent! kindness, clear, and comforting, perfect service!.",
+                "feedback": "Excellent! kindness, clear, \nand comforting, perfect service!.",
                 "try_again": "Well Done!",
                 "isCorrect": true
             },
             "option5": {
                 "text": "Smile politely and ask gently “What is your concern?”",
-                "feedback": "Correct rules, wrong tone! Be gently and guiding.",
+                "feedback": "Correct rules, wrong tone! \nBe gently and guiding.",
                 "try_again": "Try Again!",
                 "isCorrect": false
             }

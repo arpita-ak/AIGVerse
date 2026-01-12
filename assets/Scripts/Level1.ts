@@ -19,6 +19,9 @@ export class Level1 extends Component {
     @property(Node)
     StartMiniGameButton: Node = null;
 
+    @property(Node)
+    WordRushMiniGameNode: Node = null;
+
     start() {
         this.showLevel1Details();
     }
@@ -82,6 +85,8 @@ export class Level1 extends Component {
 
         console.log("Starting Mini Game for Level 1");
         // Logic to start the mini-game goes here
+
+        this.WordRushMiniGameNode.active = true;
     }
 
     update(deltaTime: number) {
