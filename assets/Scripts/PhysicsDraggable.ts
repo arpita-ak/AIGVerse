@@ -3,22 +3,27 @@ const { ccclass, property } = _decorator;
 
 @ccclass('PhysicsDraggable')
 export class PhysicsDraggable extends Component {
+    // Configuration
+    private springStrength: number = 0.2; // Adjust for "snappiness" (0.1 to 0.5)
+    private snapThreshold: number = 200;
+    private scaleDuringDrag: Vec3 = v3(0.6, 0.6, 0.6);
+    private scaleAnimDuration: number = 0.1;
+    private scheduleDelay: number = 1;
 
-    dropZoneA: Node = null!;
-    dropZoneB: Node = null!;
-    springStrength: number = 0.2; // Adjust for "snappiness" (0.1 to 0.5)
+    // Drop zones and answer tracking
+    private dropZoneA: Node = null!;
+    private dropZoneB: Node = null!;
+    private correctAns: boolean = null;
 
-    private _isDragging: boolean = false;
-    private _targetPos: Vec3 = v3();
-    private _currentVel: Vec3 = v3();
-    private _snapThreshold: number = 200;
+    // Drag state
+    private isDragging: boolean = false;
+    private targetPos: Vec3 = v3();
 
     onEnable() {
-        
-        this._targetPos.set(this.node.position);
+        this.targetPos.set(this.node.position);
     }
 
-    enableDrag(zoneA: Node, zoneB: Node)
+    enableDrag(zoneA: Node, zoneB: Node, correct: boolean)
     {
         this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
         this.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
@@ -27,6 +32,7 @@ export class PhysicsDraggable extends Component {
 
         this.dropZoneA = zoneA;
         this.dropZoneB = zoneB;
+        this.correctAns = correct;
     }
 
     disableDrag()
@@ -38,11 +44,11 @@ export class PhysicsDraggable extends Component {
     }
 
     private onTouchStart(event: EventTouch) {
-        this._isDragging = true;
+        this.isDragging = true;
         // Bring to front
         this.node.setSiblingIndex(this.node.parent!.children.length - 1);
-        tween(this.node).to(0.1, {
-            scale: new Vec3(0.6,0.6,0.6), 
+        tween(this.node).to(this.scaleAnimDuration, {
+            scale: this.scaleDuringDrag, 
             eulerAngles: new Vec3(0, 0, 0)}).start();
     }
 
@@ -50,21 +56,20 @@ export class PhysicsDraggable extends Component {
         // Convert screen touch to local node space
         const touchPos = event.getUILocation();
         const uiTransform = this.node.parent!.getComponent(UITransform)!;
-        this._targetPos = uiTransform.convertToNodeSpaceAR(v3(touchPos.x, touchPos.y, 0));
+        this.targetPos = uiTransform.convertToNodeSpaceAR(v3(touchPos.x, touchPos.y, 0));
     }
 
     private onTouchEnd() {
-        this._isDragging = false;
+        this.isDragging = false;
         this.checkDropZones();
     }
 
     update(dt: number) {
-        if (this._isDragging) {
+        if (this.isDragging) {
             // Smooth Vector Follow (Lerp-based)
-            // Position = current + (target - current) * strength
-            let currentPos = this.node.position;
-            let nextPos = v3();
-            Vec3.lerp(nextPos, currentPos, this._targetPos, this.springStrength);
+            const currentPos = this.node.position;
+            const nextPos = v3();
+            Vec3.lerp(nextPos, currentPos, this.targetPos, this.springStrength);
             this.node.setPosition(nextPos);
         }
     }
@@ -74,39 +79,35 @@ export class PhysicsDraggable extends Component {
         const posB = this.dropZoneB.worldPosition;
         const myPos = this.node.worldPosition;
 
-        if (Vec3.distance(myPos, posA) < this._snapThreshold) 
-        {
-            let zoneName = "TRUE";
-            tween(this.dropZoneA.parent.parent)
-            .to(0.1, {eulerAngles: new Vec3(0, 0, 4)})
-            .call(()=>{
-                this.node.setWorldRotation(this.dropZoneA.getRotation());
-                tween(this.node).to(0.1, {
-                    scale: this.dropZoneA.getScale(), 
-                    worldPosition: this.dropZoneA.getWorldPosition()})
-                .start();
-            })
-            .start();
-            
-            // Emit custom event for other systems to listen to
-            this.node.parent.parent.parent.parent.emit('onDropCompleted', zoneName);
-            console.log(`Dropped in: ${zoneName}`);
-        } 
-        else if (Vec3.distance(myPos, posB) < this._snapThreshold) 
-        {
-            let zoneName = "FALSE";
-            tween(this.dropZoneB.parent.parent)
-            .to(0.1, {eulerAngles: new Vec3(0, 0, -10)})
-            .call(()=>{
-                this.node.setWorldRotation(this.dropZoneB.getRotation());
-                tween(this.node).to(0.1, {
-                    scale: this.dropZoneB.getScale(), 
-                    worldPosition: this.dropZoneB.getWorldPosition()})
-                .start();
-            })
-            .start();
-            this.node.parent.parent.parent.parent.emit('onDropCompleted', zoneName);
-            console.log(`Dropped in: ${zoneName}`);
+        if (Vec3.distance(myPos, posA) < this.snapThreshold) {
+            this.handleDropZone(this.dropZoneA, 'TRUE', true);
+        } else if (Vec3.distance(myPos, posB) < this.snapThreshold) {
+            this.handleDropZone(this.dropZoneB, 'FALSE', false);
         }
+    }
+
+    private handleDropZone(dropZone: Node, zoneName: string, isZoneA: boolean) {
+        const rotationAngle = isZoneA ? 4 : -10;
+        
+        tween(dropZone.parent.parent)
+            .to(this.scaleAnimDuration, { eulerAngles: new Vec3(0, 0, rotationAngle) })
+            .call(() => {
+                this.node.setWorldRotation(dropZone.getWorldRotation());
+                tween(this.node).to(this.scaleAnimDuration, {
+                    scale: dropZone.getScale(),
+                    worldPosition: dropZone.getWorldPosition()
+                }).start();
+            })
+            .start();
+
+        this.scheduleOnce(() => {
+            const isCorrect = isZoneA ? this.correctAns : !this.correctAns;
+            if (isCorrect) {
+                this.disableDrag();
+                dropZone.active = true;
+                this.node.active = false;
+            }
+            this.node.parent.parent.parent.parent.emit('onDropCompleted', zoneName, isCorrect);
+        }, this.scheduleDelay);
     }
 }
