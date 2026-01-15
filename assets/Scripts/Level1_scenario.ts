@@ -188,6 +188,8 @@ export class Level1_scenario extends Component {
         this.BlurredBG.active = true;
         this.tweenOpacity(this.BlurredBG.getComponent(UIOpacity), 1, 200); 
 
+        this.showTextBubble(this.textBubble2, "The right one will take you \ncloser to the victory.");
+
         // show the options
         this.tweenOpacity(this.OptionButtonsNode.getComponent(UIOpacity), 0.5, 255);
         let i = 0;

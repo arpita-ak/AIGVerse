@@ -51,9 +51,9 @@ export class Level1 extends Component {
         tween(this.blurredBackground.getComponent(UIOpacity))
             .to(1, { opacity: 255 })
             .call(() => {
-                tween(this.Wizard)
-                .to(1, {position: new Vec3(0, -350, 0), scale: new Vec3(1, 1, 1)})
-                .start();
+                // tween(this.Wizard)
+                // .to(1, {position: new Vec3(0, -350, 0), scale: new Vec3(2, 2, 2)})
+                // .start();
 
                 tween(this.textBubble)
                 .to(1, {position: new Vec3(50, 50, 0)})

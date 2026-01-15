@@ -275,6 +275,6 @@ export class Level3_scenario extends Component {
 
         //not necessary as we will fetch it again
         // this.currentScenarioId++;
-        //this.Level3_Scenario.active = true;
+        this.Level3_Scenario.active = true;
     }
 }

@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, tween, Vec3, UIOpacity, Label } from 'cc';
+import { _decorator, Component, Node, tween, Vec3, UIOpacity, Label, Animation } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('chooseAvatar')
@@ -35,10 +35,14 @@ export class chooseAvatar extends Component {
     DashboardNode: Node = null;
 
     CurrentAvatar: Node = null;
+    centerScale: Vec3 = new Vec3(1.2, 1.2, 1.2);
+    sideScale: Vec3 = new Vec3(0.7, 0.7, 0.7);
+    rewardScale: Vec3 = new Vec3(0.8, 0.8, 0.8);
 
     start() {
         // default is Rakshak is at the center
         this.CurrentAvatar = this.Rakshak_character;
+        this.Rakshak_character.getComponent(Animation).play("avatar_male");
     }
 
      // Tween opacity of a Node or UIOpacity component
@@ -64,13 +68,15 @@ export class chooseAvatar extends Component {
 
         // move the Rakshika to center
         tween(this.Rakshika_Character)
-        .to(1, {position: new Vec3(0, -64, 0), scale: new Vec3(0.5, 0.5, 0.5)})
+        .to(1, {position: new Vec3(0, -64, 0), scale: this.centerScale})
         .start();
 
         // move the Rakshak to the leftwards 
         tween(this.Rakshak_character)
-        .to(1, {position: new Vec3(-600, -130, 0), scale: new Vec3(0.3, 0.3, 0.3)})
+        .to(1, {position: new Vec3(-600, -130, 0), scale: this.sideScale})
         .start();
+        this.Rakshak_character.getComponent(Animation).pause();
+
 
         // disable the right button
         this.tweenOpacity(this.RightButton, 0.5, 0);
@@ -80,6 +86,7 @@ export class chooseAvatar extends Component {
         // activate the left button
         this.LeftButton.active = true;
         this.tweenOpacity(this.LeftButton, 0.5, 255);
+        this.Rakshika_Character.getComponent(Animation).play("avatar_female");
 
         this.RakshakConfirmButton.active = false;
         this.RakshikaConfirmButton.active = true;
@@ -91,13 +98,14 @@ export class chooseAvatar extends Component {
 
         // move the Rakshak to the center 
         tween(this.Rakshak_character)
-        .to(1, {position: new Vec3(0, -64, 0), scale: new Vec3(0.5, 0.5, 0.5)})
+        .to(1, {position: new Vec3(0, -64, 0), scale: this.centerScale})
         .start();
 
         // move the Rakshika to center
         tween(this.Rakshika_Character)
-        .to(1, {position: new Vec3(600, -130, 0), scale: new Vec3(0.3, 0.3, 0.3)})
+        .to(1, {position: new Vec3(600, -130, 0), scale: this.sideScale})
         .start();
+        this.Rakshika_Character.getComponent(Animation).pause();
 
         // disable the left button
         this.tweenOpacity(this.LeftButton, 0.5, 0);
@@ -107,6 +115,7 @@ export class chooseAvatar extends Component {
         // activate the right button
         this.RightButton.active = true;
         this.tweenOpacity(this.RightButton, 0.5, 255);
+        this.Rakshak_character.getComponent(Animation).play("avatar_male");
 
         this.RakshakConfirmButton.active = true;
         this.RakshikaConfirmButton.active = false;
@@ -131,13 +140,15 @@ export class chooseAvatar extends Component {
 
         // move the Rakshak to left
         tween(this.Rakshak_character)
-        .to(1, {position: new Vec3(-400, -64, 0), scale: new Vec3(0.5, 0.5, 0.5)})
+        .to(1, {position: new Vec3(-400, -64, 0), scale: this.rewardScale})
         .start();
 
         // disable the Rakshika 
         this.tweenOpacity(this.Rakshika_Character, 0.5, 0);
         this.sleep(0.5);
         this.Rakshika_Character.active = false;
+
+        this.Rakshak_character.getComponent(Animation).play("avatar_male_reward");
 
         // show coin collection screen
         this.showCoinsWindow();
@@ -161,13 +172,15 @@ export class chooseAvatar extends Component {
 
         // move the Rakshika to left
         tween(this.Rakshika_Character)
-        .to(1, {position: new Vec3(-400, -64, 0), scale: new Vec3(0.5, 0.5, 0.5)})
+        .to(1, {position: new Vec3(-400, -64, 0), scale: this.rewardScale})
         .start();
 
         // disable the Rakshak
         this.tweenOpacity(this.Rakshak_character, 0.5, 0);
         this.sleep(0.5);
         this.Rakshak_character.active = false;
+
+        this.Rakshika_Character.getComponent(Animation).play("avatar_female_reward");
 
         // show coin collection screen
         this.showCoinsWindow();

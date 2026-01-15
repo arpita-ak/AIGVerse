@@ -219,5 +219,8 @@
       }
     },
     "globalConfigKey": "defaultConfig"
+  },
+  "macroConfig": {
+    "ENABLE_WEBGL_ANTIALIAS": true
   }
 }
