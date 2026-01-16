@@ -40,9 +40,8 @@ export class Dashboard extends Component {
         })
         .delay(1)
         .call(() => {
-            this.node.getChildByName("Left HUD").active = true;
-            tween(this.node.getChildByName("Left HUD").getComponent(UIOpacity))
-            .to(1, { opacity: 255 }).start();
+            this.node.parent.parent.emit("showLeftHUD");
+            this.node.parent.parent.emit("showCoins", 150);
 
             this.node.getChildByName("Level Buttons").active = true;
             tween(this.node.getChildByName("Level Buttons").getComponent(UIOpacity))

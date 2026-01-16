@@ -1,19 +1,28 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Component, Label, Node, tween, UIOpacity, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('utils')
 export class utils extends Component {
 
+    @property(Node)
+    LeftHUD: Node = null;
+
+    @property(Node)
+    RightHUD: Node = null;
+
     prev: any;
 
     start() {
         this.node.on("ShowText", this.showText, this);
+        this.node.on("showLeftHUD", this.showLeftHUD, this);
+        this.node.on("showRightHUD", this.showRightHUD, this);
+        this.node.on("showCoins", this.showCoins, this);
     }
 
     showText(node: Node, text: string) {
         if (this.prev) this.unschedule(this.prev);
 
-        console.log("showing labe: ", text);
+        console.log("showing label: ", text);
         const label = node.getComponent(Label);
         if (!label) return;
 
@@ -26,6 +35,25 @@ export class utils extends Component {
             label.string = text.slice(0, i);
             
         }, 0.05, text.length - 1, 0); 
+    }
+
+    showLeftHUD(){
+        this.LeftHUD.active = true;
+        tween(this.LeftHUD.getComponent(UIOpacity))
+        .to(1, { opacity: 255 }).start();
+    }
+
+    showRightHUD(){
+        this.RightHUD.active = true;
+        tween(this.RightHUD.getComponent(UIOpacity))
+        .to(1, { opacity: 255 }).start();
+    }
+
+    showCoins(number: number)
+    {
+        let coinNode = this.RightHUD.getChildByName("Coins");
+        coinNode.active = true;
+        coinNode.getChildByName("title").getComponent(Label).string = number.toString() + " Coins";
     }
 
     update(deltaTime: number) {

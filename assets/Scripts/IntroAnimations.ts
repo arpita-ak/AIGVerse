@@ -120,8 +120,8 @@ export class IntroAnimations extends Component {
             console.log("Label size: ", labelWidth, labelHeight);
 
             // adjust text bubble size based on label size
-            const paddingX = 75; 
-            const paddingY = 65;
+            const paddingX = 50; 
+            const paddingY = 70;
             textBubble.getComponent(UITransform).setContentSize(labelWidth + paddingX, labelHeight + paddingY);
 
             // fade in text bubble and show text

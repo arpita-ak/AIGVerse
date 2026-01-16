@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, tween, Vec3, UIOpacity, Label, Animation } from 'cc';
+import { _decorator, Component, Node, tween, Vec3, UIOpacity, Label, Animation, UITransform } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('chooseAvatar')
@@ -126,64 +126,57 @@ export class chooseAvatar extends Component {
         console.log("Rakshak selected");
 
         // disable all buttons
-        this.tweenOpacity(this.RightButton, 0.5, 0);
-        this.tweenOpacity(this.LeftButton, 0.5, 0);
-        this.sleep(0.5);
+        this.tweenOpacity(this.RightButton, 0.1, 0);
+        this.tweenOpacity(this.LeftButton, 0.1, 0);
+        this.sleep(0.1);
         this.RightButton.active = false;
         this.LeftButton.active = false;
         this.RakshakConfirmButton.active = false;
         this.RakshikaConfirmButton.active = false;
         
+        // disable both
+        this.Rakshak_character.active = false;
+        this.Rakshika_Character.active = false;
         // Store selection and proceed
 
         // proceed to get coins
-
-        // move the Rakshak to left
-        tween(this.Rakshak_character)
-        .to(1, {position: new Vec3(-400, -64, 0), scale: this.rewardScale})
-        .start();
-
-        // disable the Rakshika 
-        this.tweenOpacity(this.Rakshika_Character, 0.5, 0);
-        this.sleep(0.5);
-        this.Rakshika_Character.active = false;
-
-        this.Rakshak_character.getComponent(Animation).play("avatar_male_reward");
-
         // show coin collection screen
         this.showCoinsWindow();
+
+        // move the Rakshika to left
+        this.Rakshak_character.setPosition(new Vec3(-400, -64, 0));
+        this.Rakshak_character.setScale(this.rewardScale);
+        this.Rakshak_character.active = true;
+        this.Rakshak_character.getComponent(Animation).play("avatar_male_reward");
     }
 
     onRakshikaConfirmButtonClick()
     {
         console.log("Rakshika selected");
         // disable all buttons
-        this.tweenOpacity(this.RightButton, 0.5, 0);
-        this.tweenOpacity(this.LeftButton, 0.5, 0);
-        this.sleep(0.5);
+        this.tweenOpacity(this.RightButton, 0.1, 0);
+        this.tweenOpacity(this.LeftButton, 0.1, 0);
+        this.sleep(0.1);
         this.RightButton.active = false;
         this.LeftButton.active = false;
         this.RakshakConfirmButton.active = false;
         this.RakshikaConfirmButton.active = false;
 
+        // disable both
+        this.Rakshak_character.active = false;
+        this.Rakshika_Character.active = false;
+
         // Store selection and proceed
 
         // proceed to get coins
-
-        // move the Rakshika to left
-        tween(this.Rakshika_Character)
-        .to(1, {position: new Vec3(-400, -64, 0), scale: this.rewardScale})
-        .start();
-
-        // disable the Rakshak
-        this.tweenOpacity(this.Rakshak_character, 0.5, 0);
-        this.sleep(0.5);
-        this.Rakshak_character.active = false;
-
-        this.Rakshika_Character.getComponent(Animation).play("avatar_female_reward");
-
         // show coin collection screen
         this.showCoinsWindow();
+
+        // move the Rakshika to left
+        this.Rakshika_Character.setPosition(new Vec3(-400, -64, 0));
+        this.Rakshika_Character.setScale(this.rewardScale);
+        this.Rakshika_Character.active = true;
+        this.Rakshika_Character.getComponent(Animation).play("avatar_female_reward");
     }
 
     showCoinsWindow()
@@ -213,9 +206,8 @@ export class chooseAvatar extends Component {
                     this.textBubble.active = true;
                     // show text in the text bubble
                     this.tweenOpacity(this.textBubble.getComponent(UIOpacity), 0.5, 255);
-                    this.node.parent.parent.emit("ShowText", 
-                        this.textBubble.getChildByName("Label"), 
-                        "Congratulations you've earned\n50 coins on Avatar selection");
+                    this.showTextBubble(this.textBubble, 
+                        "Congratulations you've earned\n50 coins on Avatar selection.");
                     this.unschedule(coins);
                 }
                 tween(label2).to(0.1, {position: endPos}).start();
@@ -235,6 +227,36 @@ export class chooseAvatar extends Component {
         // trigger the dashboard load
         this.node.parent.parent.emit("onDashboardLoad");
         this.DashboardNode.active = true;
+    }
+
+    // Show a sequence of text messages with typewriter effect
+    private async showTextBubble(textBubble: Node, message: string = "") {
+
+        // calculate label width based on message length
+            const label = textBubble.getChildByName('Label');
+            label.getComponent(Label).string = message;
+
+            // This is the critical step! 
+            // It forces the Label to recalculate its internal mesh immediately.
+            await label.getComponent(Label).updateRenderData(true);
+            
+            const labelWidth = label.getComponent(UITransform).contentSize.width;
+            const labelHeight = label.getComponent(UITransform).contentSize.height;
+            console.log("Label size: ", labelWidth, labelHeight);
+
+            // adjust text bubble size based on label size
+            const paddingX = 50; 
+            const paddingY = 70;
+            textBubble.getComponent(UITransform).setContentSize(labelWidth + paddingX, labelHeight + paddingY);
+
+            // fade in text bubble and show text
+            this.tweenOpacity(textBubble, 0.5, 255);
+            label.getComponent(Label).string = ""; // Clear existing text
+            label.getComponent(UIOpacity).opacity = 255;
+            if (message) {
+                this.node.parent.parent.emit("ShowText", label, message);
+            }
+            await this.sleep(0.05*(message.length - 1) + 1); // wait for text to finish + extra time
     }
 
     update(deltaTime: number) {
