@@ -94,7 +94,7 @@ export class chooseAvatar extends Component {
 
      onLeftButtonClick()
     {
-        this.CurrentAvatar = this.Rakshak_character;;
+        this.CurrentAvatar = this.Rakshak_character;
 
         // move the Rakshak to the center 
         tween(this.Rakshak_character)

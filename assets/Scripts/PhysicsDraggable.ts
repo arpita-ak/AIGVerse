@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Vec3, EventTouch, v3, UITransform, tween } from 'cc';
+import { _decorator, Component, Node, Vec3, EventTouch, v3, UITransform, tween, Label } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('PhysicsDraggable')
@@ -102,12 +102,17 @@ export class PhysicsDraggable extends Component {
 
         this.scheduleOnce(() => {
             const isCorrect = isZoneA ? this.correctAns : !this.correctAns;
-            if (isCorrect) {
-                this.disableDrag();
-                dropZone.active = true;
-                this.node.active = false;
-            }
-            this.node.parent.parent.parent.parent.emit('onDropCompleted', zoneName, isCorrect);
+
+            // do this even if it is wrong
+            this.disableDrag();
+
+            // assign the current string to the dropzone
+            dropZone.children[0].getComponent(Label).string = this.node.children[0].getComponent(Label).string;
+        
+            dropZone.active = true;
+            this.node.active = false;
+
+            this.node.parent.parent.parent.parent.emit('onDropCompleted', dropZone, zoneName, isCorrect);
         }, this.scheduleDelay);
     }
 }

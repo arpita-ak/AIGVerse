@@ -269,6 +269,10 @@ export class Level1_scenario extends Component {
     {
         // Move to next scenario
         this.currentScenarioId++;
+        
+        // disable the current scene
+        this.node.active = false;
+        
         this.Level2_Scenario.active = true;
     }
 }

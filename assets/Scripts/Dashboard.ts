@@ -8,16 +8,31 @@ export class Dashboard extends Component {
     ProfileButton: Node = null;
 
     @property(Node)
+    ProfileNode: Node = null;
+
+    @property(Node)
     SettingsButton: Node = null;
+
+    @property(Node)
+    SettingsNode: Node = null;
 
     @property(Node)
     LeaderboardButton: Node = null;
 
     @property(Node)
-    RewardsBButton: Node = null;
+    LeaderBoardNode: Node = null;
+
+    @property(Node)
+    RewardsButton: Node = null;
+
+    @property(Node)
+    RewardNode: Node = null;
 
     @property(Node)
     Level_1_Node: Node = null;
+
+    @property(Node)
+    BackButton: Node = null;
 
     start() {
         this.onDasboardLoad();
@@ -52,27 +67,50 @@ export class Dashboard extends Component {
     onProfileButtonClick(){
         console.log("Profile Button Clicked");
         this.node.parent.parent.emit("onProfileButtonClick");
+
+        this.ProfileNode.active = true;
     }
 
     onSettingsButtonClick(){
         console.log("Settings Button Clicked");
         this.node.parent.parent.emit("onSettingsButtonClick");
+        
+        this.SettingsNode.active = true;
     }
 
     onLeaderboardButtonClick(){
         console.log("Leaderboard Button Clicked");
         this.node.parent.parent.emit("onLeaderboardButtonClick");
+
+        this.LeaderBoardNode.active = true;
     }
 
     onRewardsButtonClick(){
         console.log("Rewards Button Clicked");
         this.node.parent.parent.emit("onRewardsButtonClick");
+
+        this.RewardNode.active = true;
     }
 
     onLevel_1_SelectButtonClick(){
+        // disable the buttons
+
+        this.ProfileButton.active = false;
+        this.SettingsButton.active = false;
+        this.LeaderboardButton.active = false;
+        this.RewardsButton.active = false;
+
         console.log("Level 1 Selected");
         this.node.parent.parent.emit("onLevel_1_SelectButtonClick");
         this.Level_1_Node.active = true;
+    }
+
+    onBackButtonClick()
+    {
+        this.ProfileNode.active = false;
+        this.RewardNode.active = false;
+        this.LeaderBoardNode.active = false;
+        this.SettingsNode.active = false;
     }
 
     update(deltaTime: number) {

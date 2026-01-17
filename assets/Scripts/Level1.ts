@@ -25,12 +25,52 @@ export class Level1 extends Component {
     start() {
         this.showLevel1Details();
     }
+    
+     // Tween opacity of a Node or UIOpacity component
+    private tweenOpacity(target: Node | UIOpacity, duration: number, toOpacity: number) {
+        const comp = (target as Node).getComponent ? (target as Node).getComponent(UIOpacity) : (target as UIOpacity);
+        return tween(comp).to(duration, { opacity: toOpacity }).start();
+    }
+
+    // Utility function to create a delay
+    private sleep(seconds: number) {
+        return new Promise<void>((resolve) => this.scheduleOnce(() => resolve(), seconds));
+    }
+
+    // Show a sequence of text messages with typewriter effect
+    private async showTextBubble(textBubble: Node, message: string = "") {
+
+        // calculate label width based on message length
+        const label = textBubble.getChildByName('Label');
+        label.getComponent(Label).string = message;
+
+        // This is the critical step! 
+        // It forces the Label to recalculate its internal mesh immediately.
+        await label.getComponent(Label).updateRenderData(true);
+        
+        const labelWidth = label.getComponent(UITransform).contentSize.width;
+        const labelHeight = label.getComponent(UITransform).contentSize.height;
+        console.log("Label size: ", labelWidth, labelHeight);
+
+        // adjust text bubble size based on label size
+        const paddingX = 50; 
+        const paddingY = 70;
+        textBubble.getComponent(UITransform).setContentSize(labelWidth + paddingX, labelHeight + paddingY);
+
+        // fade in text bubble and show text
+        this.tweenOpacity(textBubble, 0.5, 255);
+        label.getComponent(Label).string = ""; // Clear existing text
+        label.getComponent(UIOpacity).opacity = 255;
+        if (message) {
+            this.node.parent.parent.emit("ShowText", label, message);
+        }
+        await this.sleep(0.05*(message.length - 1) + 1); // wait for text to finish + extra time
+    }
 
     showLevel1Details()
     {
         console.log("Level 1 Text Bubble Showing");
-        this.node.parent.parent.emit("ShowText", 
-            this.textBubble.getChildByName("Label"), 
+        this.showTextBubble(this.textBubble, 
             "To pass the gate, play a quick \nmini-game to unlock \nthe path ahead!");
 
         this.scheduleOnce(() => {

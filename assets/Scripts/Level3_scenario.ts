@@ -192,6 +192,7 @@ export class Level3_scenario extends Component {
         this.people.active = false;
         this.tweenOpacity(this.people.getComponent(UIOpacity), 0.5, 0);
         // hide text bubble2
+        this.tweenOpacity(this.BlurredBG.getChildByName("Wizard"), 0.1, 0);
         this.tweenOpacity(this.textBubble2, 0.5, 0);
 
         // show the options
@@ -273,7 +274,10 @@ export class Level3_scenario extends Component {
     {
         // Move to next scenario
 
-        //not necessary as we will fetch it again
+        // disable the current scene
+        this.node.active = false;
+
+        // not necessary as we will fetch it again
         // this.currentScenarioId++;
         this.Level3_Scenario.active = true;
     }

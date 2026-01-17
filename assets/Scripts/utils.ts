@@ -11,12 +11,19 @@ export class utils extends Component {
     RightHUD: Node = null;
 
     prev: any;
+    currentAvatar: Node = null;
 
     start() {
         this.node.on("ShowText", this.showText, this);
         this.node.on("showLeftHUD", this.showLeftHUD, this);
         this.node.on("showRightHUD", this.showRightHUD, this);
         this.node.on("showCoins", this.showCoins, this);
+        this.node.on("ChooseAvatarDone", this.ChooseAvatarDone, this);
+    }
+
+    ChooseAvatarDone(chosenAvatar: Node)
+    {
+        this.currentAvatar = chosenAvatar;
     }
 
     showText(node: Node, text: string) {
